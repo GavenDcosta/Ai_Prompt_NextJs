@@ -4,29 +4,52 @@ import { useState, useEffect } from 'react'
 
 import PromptCard from './PromptCard'
 
-const PromptCardList = ({ data, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCardList = ({ data, setTag }) => {
     return(
       <div className='mt-16 prompt_layout'>
          {data.map((post) => (
           <PromptCard 
             key={post._id}
             post={post}
-            handleTagClick={handleTagClick}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
+            setTag = {setTag}
           />
          ))}
       </div>
     )
-}
+  }
+  
+  
+  const Feed = () => {
+    
+    const [searchText, setSearchText] = useState('')
+    const [posts, setPosts] = useState([])
+    const [tag, setTag] = useState('all')
+    
+    
+    useEffect(() => {
+      const fetchPosts = async () => {
+        const response = await fetch('/api/prompt')
+        const data = await response.json()
+
+        const filteredPosts = data.filter((post) => {
+          return (
+            post.tag === tag
+          )
+        })
+
+       if(tag == 'all'){
+        setPosts(data)
+       }else{
+        setPosts(filteredPosts)
+       }
+
+     }
+  
+     fetchPosts()
+    }, [tag])
 
 
-const Feed = () => {
-
-  const [searchText, setSearchText] = useState('')
-  const [posts, setPosts] = useState([])
-
-  const handleSearchChange = (e) => {
+    const handleSearchChange = (e) => {
        setSearchText(e.target.value)
   }
 
@@ -65,22 +88,7 @@ const Feed = () => {
     }
 
    fetchPosts()
-     
   }
-
-  useEffect(() => {
-     const fetchPosts = async () => {
-        const response = await fetch('/api/prompt')
-        const data = await response.json()
-
-        setPosts(data)
-
-        console.log(data)
-     }
-
-     fetchPosts()
-  }, [])
-
   
   return (
     <section className='feed'>
@@ -103,9 +111,7 @@ const Feed = () => {
 
       <PromptCardList
         data={posts}
-        handleTagClick = {(e) => []}
-        handleEdit = {(e) => []}
-        handleDelete = {(e) => []}
+        setTag={setTag}
       />
     </section>
   )

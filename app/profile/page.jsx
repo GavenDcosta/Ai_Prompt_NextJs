@@ -13,6 +13,7 @@ const MyProfile = () => {
     const {data: session} = useSession()
     const [posts, setPosts] = useState([])
 
+
     useEffect(() => {
         const fetchPosts = async () => {
            const response = await fetch(`/api/users/${session?.user.id}/posts`)
@@ -49,8 +50,6 @@ const MyProfile = () => {
         }
            
     }
-
-    
 
 
   return (
