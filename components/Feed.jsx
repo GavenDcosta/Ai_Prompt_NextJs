@@ -95,7 +95,7 @@ const PromptCardList = ({ data, setTag }) => {
       <form className='relative w-full flex-center'>
         <input 
            type='text'
-           placeholder='Search for a tag or a username'
+           placeholder='Search for a tag, username or any words to search in prompts'
            value={searchText}
            onChange={handleSearchChange}
            required
